@@ -12,6 +12,10 @@ export const LAB_ROUTES: Routes = [
     loadChildren: () => import('./page-lab/page-lab.module').then(m => m.LabPageLabModule)
   },
   {
+    path: 'lab-create',
+    loadChildren: () => import('./page-lab-create/page-lab-create.module').then(m => m.LabPageLabCreateModule)
+  },
+  {
     path: '',
     redirectTo: '/auth',
     pathMatch: 'full',

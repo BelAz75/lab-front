@@ -6,19 +6,19 @@ import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { NzTreeNodeOptions } from 'ng-zorro-antd/core/tree';
 import { NzTreeNode } from 'ng-zorro-antd/core/tree/nz-tree-base-node';
 import { FormControl } from '@angular/forms';
-import { CodeService } from '../../../../../libs/core/src/lib/services/code.service';
+import { CodeService } from '@lab/core/services/code.service';
 
 @Component({
-  selector: 'lab-page-lab',
-  templateUrl: './page-lab.component.html',
-  styleUrls: ['./page-lab.component.scss'],
+  selector: 'lab-page-lab-create',
+  templateUrl: './page-lab-create.component.html',
+  styleUrls: ['./page-lab-create.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   preserveWhitespaces: false,
   host: {
     class: 'g-flex'
   }
 })
-export class LabPageLabComponent implements OnInit {
+export class LabPageLabCreateComponent implements OnInit {
   user: LabUserModel = null;
   roles = AUTH_ROLES;
   userRoleTitle: string;

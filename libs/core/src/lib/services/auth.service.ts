@@ -21,10 +21,4 @@ export class AuthService {
       { email, password },
     );
   }
-
-  getTask (): Observable<any> {
-    return this._http.get(
-      `${LAB_API_ENDPOINT}/task`,
-    )
-  }
 }

@@ -5,6 +5,7 @@ import { AuthService } from '@lab/core/services/auth.service';
 import { map } from 'rxjs/operators';
 import { LabUserModel } from '@lab/core/models/user.model';
 import { LabUserService } from '@lab/core/services/user.service';
+import { USER_AUTHORITIES } from '@lab/core/constants/authorities.constant';
 
 @Component({
   selector: 'lab-page-auth',
@@ -38,12 +39,13 @@ export class LabPageAuthComponent {
         console.info(user);
         this._userService.setUser(user);
 
+        if (user.authorities.includes(USER_AUTHORITIES.ROLE_TEACHER)) {
+          this._router.navigate(['/lab-create']);
+
+          return;
+        }
+
         this._router.navigate(['/lab']);
       })
-
-    // this.authService.getTask()
-    //   .subscribe((data) => {
-    //     console.info('task', data);
-    //   })
   }
 }
