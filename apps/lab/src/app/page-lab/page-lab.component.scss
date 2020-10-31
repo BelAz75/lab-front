@@ -72,6 +72,10 @@ $sidebar-width: 350px;
   &.lab-error {
     border-color: #de6868;
   }
+
+  &.lab-success {
+    border-color: #5ba05b;
+  }
 }
 
 .lab-btn-logout {

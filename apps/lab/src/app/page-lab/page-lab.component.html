@@ -68,7 +68,7 @@
     </div>
 
     <ng-container *ngIf="taskStatus !== null">
-      <div class="lab-result" [class.lab-error]="taskStatus !== ''">
+      <div class="lab-result" [class.lab-error]="testFailedCount !== 0" [class.lab-success]="testFailedCount === 0">
         <ng-container *ngIf="taskStatus === ''; else errorTpl">
           Успешно
         </ng-container>

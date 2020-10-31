@@ -36,6 +36,7 @@ export class LabPageLabComponent implements OnInit {
   CODE_LANGS: typeof CODE_LANGS = CODE_LANGS;
   selectedLanguage = CODE_LANGS.JAVA;
   isCodeRunning = false;
+  testFailedCount: number = 0;
   taskStatus: string = null;
 
   private _submissionId: string;
@@ -76,6 +77,7 @@ export class LabPageLabComponent implements OnInit {
 
   onRunCode(): void {
     this.taskStatus = null;
+    this.testFailedCount = 0;
 
     this._codeService.submission({ taskId: this.selectedTask.id, language: this.languageControl.value, code: this.codeControl.value })
       .subscribe(data => {
@@ -106,7 +108,8 @@ export class LabPageLabComponent implements OnInit {
       )
       .subscribe(data => {
         if (data.status.toLowerCase() === 'finished') {
-          this.taskStatus = data.error;
+          this.taskStatus = data.message;
+          this.testFailedCount = data.testsFailed;
         }
       });
   }
