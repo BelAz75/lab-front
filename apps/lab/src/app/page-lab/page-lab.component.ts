@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LabUserService } from '@lab/core/services/user.service';
 import { AuthService } from '@lab/core/services/auth.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { LabUserModel } from '@lab/core/models/user.model';
 import { AUTH_ROLES, USER_AUTHORITIES } from '@lab/core/constants/authorities.constant';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
@@ -73,7 +73,7 @@ export class LabPageLabComponent implements OnInit {
     this._codeService.getTaskById(event.node.key)
       .subscribe(task => {
         this.selectedTask = task;
-
+        
         this.getTaskTemplate();
         this.getSubmissions();
       });
@@ -83,11 +83,15 @@ export class LabPageLabComponent implements OnInit {
     this.taskStatus = null;
     this.testFailedCount = 0;
 
-    this._codeService.submission({ taskId: this.selectedTask.id, language: this.languageControl.value, code: this.codeControl.value })
+    this._codeService.submission({
+      taskId: this.selectedTask.id,
+      language: this.languageControl.value,
+      code: this.codeControl.value
+    })
       .subscribe(data => {
         this.isCodeRunning = true;
-        this.codeControl.disable();
-        this.languageControl.disable();
+        this.codeControl.disable({ emitEvent: false });
+        this.languageControl.disable({ emitEvent: false });
 
         this._submissionId = data.id;
 
@@ -119,8 +123,8 @@ export class LabPageLabComponent implements OnInit {
         takeWhile(data => data.status.toLowerCase() !== 'finished', true),
         finalize(() => {
           this.isCodeRunning = false;
-          this.codeControl.enable();
-          this.languageControl.enable();
+          this.codeControl.enable({ emitEvent: false });
+          this.languageControl.enable({ emitEvent: false });
 
           this._changeDetectorRef.detectChanges();
         })
@@ -153,18 +157,18 @@ export class LabPageLabComponent implements OnInit {
       });
   }
 
-  private getSubmissions (): void {
+  private getSubmissions(): void {
     this._codeService.getSubmissions(this.selectedTask.id)
       .subscribe(data => {
         this.submissions = data.content.map(it => {
-          const date = new Date(it.submittedAt)
+          const date = new Date(it.submittedAt);
           return {
             ...it,
             submittedAt: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
-          }
+          };
         });
 
         this._changeDetectorRef.detectChanges();
-      })
+      });
   }
 }
