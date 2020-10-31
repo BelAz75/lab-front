@@ -65,7 +65,13 @@
   <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
     {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
   </div>
-
+  <button
+    class="lab-buttons__save"
+    nz-button
+    nzType="primary"
+    (click)="onLogout()">
+    Выйти
+  </button>
   <div class="lab-sidebar__title">
     <div class="lab-sidebar__title-label">Основы Java для спортивного программирования</div>
     <div class="lab-sidebar__title-progress">Прогресс по курсу: 0/18</div>

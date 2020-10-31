@@ -20,5 +20,11 @@ export class AuthService {
       `${LAB_API_ENDPOINT}/authentication`,
       { email, password },
     );
-  }
+  };
+
+  logout (): Observable<void> {
+    return this._http.get<void>(
+      `${LAB_API_ENDPOINT}/logout`
+    );
+  };
 }
