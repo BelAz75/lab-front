@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LabUserService } from '@lab/core/services/user.service';
 import { LabUserModel } from '@lab/core/models/user.model';
 import { AUTH_ROLES, USER_AUTHORITIES } from '@lab/core/constants/authorities.constant';
@@ -7,6 +7,16 @@ import { NzTreeNodeOptions } from 'ng-zorro-antd/core/tree';
 import { NzTreeNode } from 'ng-zorro-antd/core/tree/nz-tree-base-node';
 import { FormControl } from '@angular/forms';
 import { CodeService } from '@lab/core/services/code.service';
+
+enum OUTPUT_PARAMETERS {
+  STRING = 'STRING',
+  INTEGER = 'INTEGER',
+}
+
+const OUTPUT_PARAMETERS_NAMES = {
+  [OUTPUT_PARAMETERS.STRING]: 'Строка',
+  [OUTPUT_PARAMETERS.INTEGER]: 'Число',
+}
 
 @Component({
   selector: 'lab-page-lab-create',
@@ -22,35 +32,34 @@ export class LabPageLabCreateComponent implements OnInit {
   user: LabUserModel = null;
   roles = AUTH_ROLES;
   userRoleTitle: string;
-  selectedStep: NzTreeNode;
-  codeControl: FormControl = new FormControl('');
+  selectedTask: any;
+  descriptionControl: FormControl = new FormControl('');
+  titleControl: FormControl = new FormControl('');
+  methodControl: FormControl = new FormControl('');
+  input1ControlName: FormControl = new FormControl('');
+  input1ControlType: FormControl = new FormControl('');
+  input2ControlName: FormControl = new FormControl('');
+  input2ControlType: FormControl = new FormControl('');
+  outputControl: FormControl = new FormControl('');
+  test1InputControl: FormControl = new FormControl('');
+  test1ExpectedControl: FormControl = new FormControl('');
+  test2InputControl: FormControl = new FormControl('');
+  test2ExpectedControl: FormControl = new FormControl('');
+
+  isAddedNew = false;
+  isEdit = false;
+
+  OUTPUT_PARAMETERS: typeof OUTPUT_PARAMETERS = OUTPUT_PARAMETERS;
+  OUTPUT_PARAMETERS_NAMES: typeof OUTPUT_PARAMETERS_NAMES = OUTPUT_PARAMETERS_NAMES;
 
   private _taskCount = 0;
 
-  learnNodes: NzTreeNodeOptions[] = [
-    {
-      title: '1.1 Первая программа, переменные, считывание',
-      key: '1001',
-      expanded: true,
-      isLeaf: true
-    },
-    {
-      title: '1.2 Подводные камни',
-      key: '1002',
-      expanded: true,
-      isLeaf: true
-    },
-    {
-      title: '1.3 Локальный запуск',
-      key: '1003',
-      expanded: true,
-      isLeaf: true
-    }
-  ];
+  tasksNodes: NzTreeNodeOptions[] = [];
 
   constructor(
     private _userService: LabUserService,
-    private _codeService: CodeService
+    private _codeService: CodeService,
+    private _changeDetectorRef: ChangeDetectorRef
   ) {
   }
 
@@ -62,27 +71,92 @@ export class LabPageLabCreateComponent implements OnInit {
   }
 
   onSelectLearn(event: NzFormatEmitEvent): void {
-    console.log(event);
-    this.selectedStep = event.node;
-  }
+    this._codeService.getTaskById(event.node.key)
+      .subscribe(task => {
+        this.selectedTask = task;
 
-  onSelectedKeysChange(event: any): void {
-    console.log(event);
-  }
+        this._changeDetectorRef.detectChanges();
 
-  onRunCode(): void {
-    this._taskCount++;
+        console.info(this.selectedTask);
 
-    this._codeService.submission({ taskId: String(this._taskCount), language: 'java', code: 'void' })
-      .subscribe(data => {
-        console.info('--', data);
+        this.titleControl.setValue(this.selectedTask.title);
+        this.descriptionControl.setValue(this.selectedTask.description);
+        this.test1InputControl.setValue(this.selectedTask.taskTestCases[0].input);
+        this.test1ExpectedControl.setValue(this.selectedTask.taskTestCases[0].output);
+        this.test2InputControl.setValue(this.selectedTask.taskTestCases[1].input);
+        this.test2ExpectedControl.setValue(this.selectedTask.taskTestCases[1].output);
+        this.outputControl.setValue(this.selectedTask.taskParameters[0].outputParameters);
+        this.methodControl.setValue(this.selectedTask.taskParameters[0].methodName);
+        this.input1ControlName.setValue(this.selectedTask.taskParameters[0].inputParameters[0].name);
+        this.input1ControlType.setValue(this.selectedTask.taskParameters[0].inputParameters[0].type);
+        this.input2ControlName.setValue(this.selectedTask.taskParameters[0].inputParameters[1].name);
+        this.input2ControlType.setValue(this.selectedTask.taskParameters[0].inputParameters[1].type);
       });
+
+    this.isEdit = true;
+  }
+
+  onAddNew (): void {
+    this.isAddedNew = true;
+  }
+
+  onCancel (): void {
+    this.isAddedNew = false;
+  }
+
+  onSave (): void {
+    const task = {
+      title: this.titleControl.value,
+      description: this.descriptionControl.value,
+      inputParameters: [
+        {
+          name: this.input1ControlName.value,
+          type: this.input1ControlType.value,
+        },
+        {
+          name: this.input2ControlName.value,
+          type: this.input2ControlType.value,
+        }
+      ],
+      methodName: this.methodControl.value,
+      outputParameters: this.outputControl.value,
+      testCases: [
+        {
+          inputData: this.test1InputControl.value,
+          expectedData: this.test1ExpectedControl.value,
+        },
+        {
+          inputData: this.test2InputControl.value,
+          expectedData: this.test2ExpectedControl.value,
+        }
+      ]
+    };
+
+    if (this.isAddedNew) {
+      this._codeService.createTask(task)
+        .subscribe(() => {
+          this.isAddedNew = false;
+
+          this.getTasks();
+        });
+    }
+
+    if (this.isEdit) {
+      this._codeService.editTask(task)
+        .subscribe(() => {
+          this.isEdit = false;
+
+          this.getTasks();
+        });
+    }
   }
 
   private getTasks(): void {
-    this._codeService.getTasks({ pageNumber: 1, pageSize: 10 })
+    this._codeService.getTasks({ pageNumber: 1, pageSize: 1000 })
       .subscribe((data) => {
-        console.info('task', data);
+        this.tasksNodes = data;
+
+        this._changeDetectorRef.detectChanges();
       });
   }
 

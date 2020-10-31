@@ -72,29 +72,34 @@
   </div>
 
   <nz-tree
-    [nzData]="learnNodes"
+    [nzData]="tasksNodes"
     nzShowLine
     (nzClick)="onSelectLearn($event)">
   </nz-tree>
 </aside>
 
 <main class="g-flex__item">
-  <div class="lab-task-title">
-    Задание: написать код
-  </div>
+  <ng-container *ngIf="selectedTask">
+    <div class="lab-task-title">
+      {{ selectedTask.description }}
+    </div>
 
-  <div class="lab-code">
-    <textarea
-      class="lab-code-edit"
-      [formControl]="codeControl">
-    </textarea>
+    <div class="lab-code g-flex-column">
+      <nz-select [formControl]="taskControl">
+        <nz-option
+          *ngFor="let task of selectedTask.taskParameters"
+          [nzValue]="task.language"
+          [nzLabel]="task.language">
+        </nz-option>
+      </nz-select>
 
-    <button
-      class="lab-btn-run"
-      nz-button
-      nzType="primary"
-      (click)="onRunCode()">
-      Запустить
-    </button>
-  </div>
+      <button
+        class="lab-btn-run"
+        nz-button
+        nzType="primary"
+        (click)="onRunCode()">
+        Запустить
+      </button>
+    </div>
+  </ng-container>
 </main>

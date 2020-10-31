@@ -10,6 +10,7 @@ import { LabPageLabCreateRoutingModule } from './page-lab-create.routing';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
     NzTreeModule,
     NzRadioModule,
     NzTabsModule,
+    NzSelectModule
   ],
   declarations: [
     LabPageLabCreateComponent,

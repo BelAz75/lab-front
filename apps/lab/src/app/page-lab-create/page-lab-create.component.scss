@@ -6,6 +6,10 @@ $sidebar-width: 350px;
   margin: ($grid-offset-step * 2) ($grid-offset-step * 3);
 }
 
+.lab-btn-add {
+  margin-right: $grid-offset-step;
+}
+
 .lab-sidebar {
   width: $sidebar-width;
   margin-right: $grid-offset-step;
@@ -14,6 +18,7 @@ $sidebar-width: 350px;
     width: $sidebar-width;
     margin-right: $grid-offset-step;
     margin-bottom: $grid-offset-step;
+    margin-top: $grid-offset-step;
   }
 
   &__title-label {
@@ -36,10 +41,54 @@ $sidebar-width: 350px;
 }
 
 .lab-task-title {
+  font-weight: 600;
+  font-size: 15px;
   margin-bottom: $grid-offset-step * 2;
 }
 
-.lab-code-edit {
-  width: 500px;
-  height: 300px;
+.lab-desc {
+  height: 150px;
+}
+
+.lab-label,
+.lab-input1 {
+  margin-bottom: $grid-offset-step / 2;
+}
+
+.lab-title,
+.lab-desc,
+.lab-method,
+.lab-input2,
+.lab-output,
+.lab-test1 {
+  margin-bottom: $grid-offset-step * 2;
+}
+
+.lab-test1,
+.lab-test2 {
+  &__input,
+  &__expected {
+    height: 80px;
+  }
+
+  &__expected {
+    margin-left: $grid-offset-step;
+  }
+}
+
+.lab-input1,
+.lab-input2 {
+  &__type {
+    width: 150px;
+    margin-left: $grid-offset-step;
+  }
+}
+
+.lab-buttons {
+  align-self: flex-end;
+  margin-top: $grid-offset-step * 2;
+
+  &__save {
+    margin-left: $grid-offset-step * 2;
+  }
 }

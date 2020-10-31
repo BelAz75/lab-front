@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LabUserService } from '@lab/core/services/user.service';
 import { LabUserModel } from '@lab/core/models/user.model';
 import { AUTH_ROLES, USER_AUTHORITIES } from '@lab/core/constants/authorities.constant';
@@ -22,35 +22,17 @@ export class LabPageLabComponent implements OnInit {
   user: LabUserModel = null;
   roles = AUTH_ROLES;
   userRoleTitle: string;
-  selectedStep: NzTreeNode;
-  codeControl: FormControl = new FormControl('');
+  selectedTask: any;
+  taskControl: FormControl = new FormControl('');
 
   private _taskCount = 0;
 
-  learnNodes: NzTreeNodeOptions[] = [
-    {
-      title: '1.1 Первая программа, переменные, считывание',
-      key: '1001',
-      expanded: true,
-      isLeaf: true
-    },
-    {
-      title: '1.2 Подводные камни',
-      key: '1002',
-      expanded: true,
-      isLeaf: true
-    },
-    {
-      title: '1.3 Локальный запуск',
-      key: '1003',
-      expanded: true,
-      isLeaf: true
-    }
-  ];
+  tasksNodes: NzTreeNodeOptions[] = [];
 
   constructor(
     private _userService: LabUserService,
-    private _codeService: CodeService
+    private _codeService: CodeService,
+    private _changeDetectorRef: ChangeDetectorRef
   ) {
   }
 
@@ -62,12 +44,14 @@ export class LabPageLabComponent implements OnInit {
   }
 
   onSelectLearn(event: NzFormatEmitEvent): void {
-    console.log(event);
-    this.selectedStep = event.node;
-  }
+    this._codeService.getTaskById(event.node.key)
+      .subscribe(task => {
+        this.selectedTask = task;
 
-  onSelectedKeysChange(event: any): void {
-    console.log(event);
+        this._changeDetectorRef.detectChanges();
+
+        console.info(this.selectedTask);
+      })
   }
 
   onRunCode(): void {
@@ -80,9 +64,13 @@ export class LabPageLabComponent implements OnInit {
   }
 
   private getTasks(): void {
-    this._codeService.getTasks({ pageNumber: 1, pageSize: 10 })
+    this._codeService.getTasks({ pageNumber: 1, pageSize: 1000 })
       .subscribe((data) => {
         console.info('task', data);
+
+        this.tasksNodes = data;
+
+        this._changeDetectorRef.detectChanges();
       });
   }
 

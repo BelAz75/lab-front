@@ -20,7 +20,7 @@ import { USER_AUTHORITIES } from '@lab/core/constants/authorities.constant';
 export class LabPageAuthComponent {
   passwordVisible = false;
 
-  emailControl: FormControl = new FormControl('petr@gmail.com');
+  emailControl: FormControl = new FormControl('maria.ivanova@gmail.com'); // petr@gmail.com
   passwordControl: FormControl = new FormControl('12345');
 
   constructor (

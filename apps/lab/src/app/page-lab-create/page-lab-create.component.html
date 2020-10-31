@@ -1,100 +1,163 @@
-<!--
-<div class="lab-top-bar g-flex g-flex&#45;&#45;align-center g-flex-column__item-fixed">
-  <div class="lab-top-bar__title g-flex__item-fixed">
-    <div class="lab-top-bar__title-label">Основы Java для спортивного программирования</div>
-    <div class="lab-top-bar__title-progress">Прогресс по курсу: 0/18</div>
-  </div>
-
-  <div class="lab-top-bar__steps g-flex__item g-flex g-flex&#45;&#45;align-center">
-    <button
-      class="lab-step-learn g-flex__item-fixed"
-      nz-button
-      nzType="primary">
-      <i nz-icon nzType="snippets"></i>
-    </button>
-
-    <nz-radio-group
-      class="lab-steps-code g-flex__item"
-      [formControl]="codeStepControl">
-      <label
-        class="lab-step-code"
-        nz-radio-button
-        nzValue="step0">
-        <i nz-icon nzType="code"></i>
-      </label>
-
-      <label
-        class="lab-step-code"
-        nz-radio-button
-        nzValue="step1">
-        <i nz-icon nzType="code"></i>
-      </label>
-
-      <label
-        class="lab-step-code"
-        nz-radio-button
-        nzValue="step2">
-        <i nz-icon nzType="code"></i>
-      </label>
-    </nz-radio-group>
-  </div>
-
-  <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
-    {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
-  </div>
-</div>
-
-<div class="lab-main g-flex g-flex-column__item">
-  <aside class="lab-sidebar g-flex__item-fixed">
-    <div>
-
-    </div>
-
-    <nz-tree
-      [nzData]="learnNodes"
-      nzShowLine
-      (nzClick)="onSelectLearn($event)">
-    </nz-tree>
-  </aside>
-
-  <div class="lab-content g-flex__item"></div>
-</div>
--->
-
 <aside class="lab-sidebar g-flex__item-fixed">
   <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
     {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
   </div>
 
-  <div class="lab-sidebar__title">
-    <div class="lab-sidebar__title-label">Основы Java для спортивного программирования</div>
-    <div class="lab-sidebar__title-progress">Прогресс по курсу: 0/18</div>
+  <div class="lab-sidebar__title g-flex g-flex--align-center">
+    <button
+      class="lab-btn-add"
+      nz-button
+      nzType="primary" (click)="onAddNew()">
+      <i nz-icon nzType="plus"></i>
+    </button>
+
+    <div class="lab-sidebar__title-label">Список заданий:</div>
   </div>
 
   <nz-tree
-    [nzData]="learnNodes"
+    [nzData]="tasksNodes"
     nzShowLine
     (nzClick)="onSelectLearn($event)">
   </nz-tree>
 </aside>
 
-<main class="g-flex__item">
-  <div class="lab-task-title">
-    Задание: написать код
-  </div>
+<main class="g-flex__item g-flex-column">
+  <ng-container *ngIf="isAddedNew || isEdit">
+    <div *ngIf="isAddedNew" class="lab-task-title">
+      Добавление нового задания
+    </div>
 
-  <div class="lab-code">
+    <div *ngIf="isEdit" class="lab-task-title">
+      Редактирование задания
+    </div>
+
+    <div class="lab-label">Название:</div>
+    <input
+      class="lab-title"
+      nz-input
+      [formControl]="titleControl" />
+
+    <div class="lab-label">Описание задачи:</div>
     <textarea
-      class="lab-code-edit"
-      [formControl]="codeControl">
+      class="lab-desc"
+      nz-input
+      [formControl]="descriptionControl">
     </textarea>
 
-    <button
-      class="lab-btn-run"
-      nz-button
-      nzType="primary"
-      (click)="onRunCode()">
-      Запустить
-    </button>
-  </div>
+    <div class="lab-label">Имя метода:</div>
+    <input
+      class="lab-method"
+      nz-input
+      [formControl]="methodControl" />
+
+    <div class="lab-label">Входные параметры:</div>
+    <div class="lab-input1 g-flex g-flex--align-center">
+      <input
+        class="lab-input1__name"
+        nz-input
+        [formControl]="input1ControlName" />
+
+      <nz-select
+        class="lab-input1__type"
+        [formControl]="input1ControlType">
+        <nz-option
+          [nzValue]="OUTPUT_PARAMETERS.STRING"
+          [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.STRING]">
+        </nz-option>
+
+        <nz-option
+          [nzValue]="OUTPUT_PARAMETERS.INTEGER"
+          [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.INTEGER]">
+        </nz-option>
+      </nz-select>
+    </div>
+
+    <div class="lab-input2 g-flex g-flex--align-center">
+      <input
+        class="lab-input2__name"
+        nz-input
+        [formControl]="input2ControlName" />
+
+      <nz-select
+        class="lab-input2__type"
+        [formControl]="input2ControlType">
+        <nz-option
+          [nzValue]="OUTPUT_PARAMETERS.STRING"
+          [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.STRING]">
+        </nz-option>
+
+        <nz-option
+          [nzValue]="OUTPUT_PARAMETERS.INTEGER"
+          [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.INTEGER]">
+        </nz-option>
+      </nz-select>
+    </div>
+
+    <div class="lab-label">Тип выходного параметра:</div>
+    <nz-select
+      class="lab-output"
+      [formControl]="outputControl">
+      <nz-option
+        [nzValue]="OUTPUT_PARAMETERS.STRING"
+        [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.STRING]">
+      </nz-option>
+
+      <nz-option
+        [nzValue]="OUTPUT_PARAMETERS.INTEGER"
+        [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.INTEGER]">
+      </nz-option>
+    </nz-select>
+
+    <div class="lab-label">Тест 1:</div>
+    <div class="lab-test1 g-flex g-flex--align-center">
+      <textarea
+        class="lab-test1__input"
+        nz-input
+        placeholder="Входные значения"
+        [formControl]="test1InputControl">
+      </textarea>
+
+      <textarea
+        class="lab-test1__expected"
+        nz-input
+        placeholder="Ожидаемый результат"
+        [formControl]="test1ExpectedControl">
+      </textarea>
+    </div>
+
+    <div class="lab-label">Тест 2:</div>
+    <div class="lab-test2 g-flex g-flex--align-center">
+      <textarea
+        class="lab-test2__input"
+        nz-input
+        placeholder="Входные значения"
+        [formControl]="test2InputControl">
+      </textarea>
+
+      <textarea
+        class="lab-test2__expected"
+        nz-input
+        placeholder="Ожидаемый результат"
+        [formControl]="test2ExpectedControl">
+      </textarea>
+    </div>
+
+    <div class="lab-buttons g-flex g-flex--align-center">
+      <button
+        class="lab-buttons__cancel"
+        nz-button
+        nzType="default"
+        (click)="onCancel()">
+        Отмена
+      </button>
+
+      <button
+        class="lab-buttons__save"
+        nz-button
+        nzType="primary"
+        (click)="onSave()">
+        Сохранить
+      </button>
+    </div>
+  </ng-container>
 </main>
