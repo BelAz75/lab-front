@@ -102,6 +102,7 @@ export class LabPageLabCreateComponent implements OnInit {
 
   onCancel (): void {
     this.isAddedNew = false;
+    this.isEdit = false;
   }
 
   onSave (): void {

@@ -22,7 +22,7 @@
 </aside>
 
 <main class="g-flex__item g-flex-column">
-  <ng-container *ngIf="isAddedNew || isEdit">
+  <ng-container *ngIf="isAddedNew || isEdit; else placeholderTpl">
     <div *ngIf="isAddedNew" class="lab-task-title">
       Добавление нового задания
     </div>
@@ -160,4 +160,8 @@
       </button>
     </div>
   </ng-container>
+
+  <ng-template #placeholderTpl>
+    Выбирите задание из списка или создайте новое
+  </ng-template>
 </main>
