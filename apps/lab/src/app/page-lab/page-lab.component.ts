@@ -23,7 +23,7 @@ export class LabPageLabComponent implements OnInit {
   roles = AUTH_ROLES;
   userRoleTitle: string;
   selectedTask: any;
-  taskControl: FormControl = new FormControl('');
+  codeControl: FormControl = new FormControl('');
 
   private _taskCount = 0;
 
@@ -40,7 +40,7 @@ export class LabPageLabComponent implements OnInit {
     this.user = this._userService.getUser();
     this.userRoleTitle = this.roles[this.user?.authorities[0] || USER_AUTHORITIES.ROLE_USER].title;
 
-    this.getTasks();
+    this.getAssignedTasks();
   }
 
   onSelectLearn(event: NzFormatEmitEvent): void {
@@ -63,8 +63,8 @@ export class LabPageLabComponent implements OnInit {
       });
   }
 
-  private getTasks(): void {
-    this._codeService.getTasks({ pageNumber: 1, pageSize: 1000 })
+  private getAssignedTasks(): void {
+    this._codeService.getAssignedTasks({ pageNumber: 1, pageSize: 1000 })
       .subscribe((data) => {
         console.info('task', data);
 

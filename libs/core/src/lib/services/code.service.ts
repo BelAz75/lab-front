@@ -14,14 +14,6 @@ export class CodeService {
   ) {
   }
 
-  /*
-  {
-    "taskId": "1",
-    "language": "java",
-    "code": "void",
-    "userId": 1
-}
-   */
   submission({ taskId, language, code }: { taskId: string, language: string, code: string }): Observable<any> {
     return this._http.post<any>(
       `${LAB_API_ENDPOINT}/submission`,
@@ -32,6 +24,24 @@ export class CodeService {
   getTasks({ pageNumber, pageSize }: { pageNumber: number, pageSize: number }): Observable<any> {
     return this._http.get(
       `${LAB_API_ENDPOINT}/task?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    )
+      .pipe(
+        map(({ content }: { content: any }) => {
+          return content.map(it => {
+            return {
+              title: it.title,
+              key: it.id,
+              expanded: true,
+              isLeaf: true
+            };
+          });
+        })
+      );
+  }
+
+  getAssignedTasks({ pageNumber, pageSize }: { pageNumber: number, pageSize: number }): Observable<any> {
+    return this._http.get(
+      `${LAB_API_ENDPOINT}/task/assigned?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
       .pipe(
         map(({ content }: { content: any }) => {
