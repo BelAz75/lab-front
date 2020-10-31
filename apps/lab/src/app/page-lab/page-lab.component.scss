@@ -48,6 +48,7 @@ $sidebar-width: 350px;
 
   &__edit {
     height: 300px;
+    padding: $grid-offset-step * 2;
   }
 }
 
@@ -61,7 +62,7 @@ $sidebar-width: 350px;
 
 .lab-result {
   white-space: pre-wrap;
-  padding: $grid-offset-step;
+  padding: $grid-offset-step * 2;
   margin-top: $grid-offset-step * 2;
   background: #fafafa;
   width: 500px;
@@ -71,4 +72,8 @@ $sidebar-width: 350px;
   &.lab-error {
     border-color: #de6868;
   }
+}
+
+.lab-btn-logout {
+  margin-left: $grid-offset-step;
 }
