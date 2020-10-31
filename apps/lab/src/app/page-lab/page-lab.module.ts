@@ -12,6 +12,8 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   imports: [
@@ -26,7 +28,9 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzRadioModule,
     NzTabsModule,
     NzSelectModule,
-    NzSpinModule
+    NzSpinModule,
+    NzListModule,
+    NzModalModule
   ],
   declarations: [
     LabPageLabComponent,

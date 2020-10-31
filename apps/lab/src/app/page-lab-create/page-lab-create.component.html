@@ -1,14 +1,20 @@
 <aside class="lab-sidebar g-flex__item-fixed">
-  <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
-    {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
+  <div class="g-flex g-flex--align-center">
+    <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
+      {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
+    </div>
+
+    <button
+      class="lab-btn-logout"
+      nz-button
+      nzType="primary"
+      title="Выйти"
+      nzSize="small"
+      (click)="onLogout()">
+      <i nz-icon nzType="logout"></i>
+    </button>
   </div>
-  <button
-    class="lab-buttons__save"
-    nz-button
-    nzType="primary"
-    (click)="onLogout()">
-    Выйти
-  </button>
+
   <div class="lab-sidebar__title g-flex g-flex--align-center">
     <button
       class="lab-btn-add"
@@ -168,6 +174,6 @@
   </ng-container>
 
   <ng-template #placeholderTpl>
-    Выбирите задание из списка или создайте новое
+    Выберите задание из списка или создайте новое
   </ng-template>
 </main>

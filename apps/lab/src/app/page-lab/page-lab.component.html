@@ -27,60 +27,112 @@
 </aside>
 
 <main class="g-flex__item g-flex-column">
-  <ng-container *ngIf="selectedTask; else placeholderTpl">
-    <div class="lab-task-title">
-      {{ selectedTask?.description }}
-    </div>
+  <nz-tabset *ngIf="selectedTask; else placeholderTpl">
+    <nz-tab nzTitle="Задание">
+      <ng-container>
+        <div class="lab-task-title">
+          {{ selectedTask?.description }}
+        </div>
 
-    <div class="lab-code g-flex-column">
-      <nz-select
-        class="lab-code__lang"
-        [formControl]="languageControl">
-        <nz-option
-          [nzValue]="CODE_LANGS.JAVA"
-          [nzLabel]="CODE_LANGS.JAVA">
-        </nz-option>
+        <div class="lab-code g-flex-column">
+          <nz-select
+            class="lab-code__lang"
+            [formControl]="languageControl">
+            <nz-option
+              [nzValue]="CODE_LANGS.JAVA"
+              [nzLabel]="CODE_LANGS.JAVA">
+            </nz-option>
 
-        <nz-option
-          [nzValue]="CODE_LANGS.PYTHON"
-          [nzLabel]="CODE_LANGS.PYTHON">
-        </nz-option>
-      </nz-select>
+            <nz-option
+              [nzValue]="CODE_LANGS.PYTHON"
+              [nzLabel]="CODE_LANGS.PYTHON">
+            </nz-option>
+          </nz-select>
 
-      <textarea
-        class="lab-code__edit"
-        [formControl]="codeControl">
-      </textarea>
+          <textarea
+            class="lab-code__edit"
+            [formControl]="codeControl">
+          </textarea>
 
-      <div class="lab-footer g-flex g-flex--align-center g-flex--space-between">
-        <button
-          class="lab-btn-run"
-          nz-button
-          nzType="primary"
-          [disabled]="isCodeRunning"
-          (click)="onRunCode()">
-          Запустить
-        </button>
+          <div class="lab-footer g-flex g-flex--align-center">
+            <button
+              class="lab-btn-run"
+              nz-button
+              nzType="primary"
+              [disabled]="isCodeRunning"
+              (click)="onRunCode()">
+              Запустить
+            </button>
 
-        <nz-spin *ngIf="isCodeRunning">
-        </nz-spin>
-      </div>
-    </div>
+            <nz-spin *ngIf="isCodeRunning" class="lab-spin">
+            </nz-spin>
+          </div>
+        </div>
 
-    <ng-container *ngIf="taskStatus !== null">
-      <div class="lab-result" [class.lab-error]="testFailedCount !== 0" [class.lab-success]="testFailedCount === 0">
-        <ng-container *ngIf="taskStatus === ''; else errorTpl">
-          Успешно
+        <ng-container *ngIf="taskStatus !== null">
+          <div class="lab-result" [class.lab-error]="testFailedCount !== 0" [class.lab-success]="testFailedCount === 0">
+            <ng-container *ngIf="taskStatus === ''; else errorTpl">
+              Успешно
+            </ng-container>
+
+            <ng-template #errorTpl>
+              {{ taskStatus }}
+            </ng-template>
+          </div>
         </ng-container>
+      </ng-container>
+    </nz-tab>
 
-        <ng-template #errorTpl>
-          {{ taskStatus }}
-        </ng-template>
-      </div>
-    </ng-container>
-  </ng-container>
+    <nz-tab *ngIf="submissions.length" nzTitle="Статистика">
+      <nz-list class="lab-stat-list" nzBordered>
+        <nz-list-item
+          *ngFor="let submission of submissions"
+          [class.lab-error]="submission.testFailedCount !== 0"
+          [class.lab-success]="submission.testFailedCount === 0"
+          (click)="showModal(submission)">
+          <div class="lab-stat-list__item g-flex g-flex--space-between g-flex--align-center">
+            <div>
+              {{ submission.language }}
+            </div>
+
+            <div class="lab-stat-list__date">
+              {{ submission.submittedAt }}
+            </div>
+          </div>
+        </nz-list-item>
+      </nz-list>
+    </nz-tab>
+  </nz-tabset>
 
   <ng-template #placeholderTpl>
-    Выбирите задание из списка
+    Выберите задание из списка
   </ng-template>
 </main>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="selectedTask?.title"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleOk()">
+  <div class="lab-stat g-flex-column">
+    <div class="lab-stat__lang">
+      {{ selectedSubmission?.language }}:
+    </div>
+
+    <code class="lab-stat__code">
+      {{ selectedSubmission?.code }}
+    </code>
+
+    <div class="lab-stat__passed">
+      Количество успешных тестов: {{ selectedSubmission?.testsPassed }}
+    </div>
+
+    <div class="lab-stat__failed">
+      Количество неудачных тестов: {{ selectedSubmission?.testsFailed }}
+    </div>
+  </div>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="primary" (click)="handleOk()">OK</button>
+  </ng-template>
+</nz-modal>

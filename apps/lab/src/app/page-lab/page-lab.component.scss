@@ -81,3 +81,53 @@ $sidebar-width: 350px;
 .lab-btn-logout {
   margin-left: $grid-offset-step;
 }
+
+.lab-spin {
+  margin-left: $grid-offset-step * 4;
+}
+
+.lab-stat-list {
+  user-select: none;
+  cursor: pointer;
+
+  &__item {
+    width: 100%;
+  }
+
+  &__date {
+    font-size: 11px;
+  }
+
+  .lab-error {
+    background: rgba(#de6868, 0.2);
+  }
+
+  .lab-success {
+    background: rgba(#5ba05b, 0.2);
+  }
+}
+
+.lab-stat {
+  &__lang {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: $grid-offset-step;
+  }
+
+  &__code {
+    white-space: pre-wrap;
+    padding: $grid-offset-step * 2;
+    background: #fafafa;
+    border: 1px solid #efefef;
+    border-radius: 2px;
+  }
+
+  &__failed {
+    color: #de6868;
+  }
+
+  &__passed {
+    margin-top: $grid-offset-step;
+    color: #5ba05b;
+  }
+}

@@ -21,6 +21,12 @@ export class CodeService {
     );
   }
 
+  getSubmissions(taskId: string): Observable<any> {
+    return this._http.get<any>(
+      `${LAB_API_ENDPOINT}/submission?pageNumber=${1}&pageSize=${1000}&taskId=${taskId}`
+    );
+  }
+
   getSubmissionById (submissionId: string): Observable<any> {
     return this._http.get<any>(
       `${LAB_API_ENDPOINT}/submission/${submissionId}`

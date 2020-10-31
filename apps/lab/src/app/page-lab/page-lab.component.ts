@@ -36,8 +36,11 @@ export class LabPageLabComponent implements OnInit {
   CODE_LANGS: typeof CODE_LANGS = CODE_LANGS;
   selectedLanguage = CODE_LANGS.JAVA;
   isCodeRunning = false;
-  testFailedCount: number = 0;
+  testFailedCount = 0;
   taskStatus: string = null;
+  submissions: any[] = [];
+  isVisible = false;
+  selectedSubmission: any;
 
   private _submissionId: string;
 
@@ -72,6 +75,7 @@ export class LabPageLabComponent implements OnInit {
         this.selectedTask = task;
 
         this.getTaskTemplate();
+        this.getSubmissions();
       });
   }
 
@@ -93,6 +97,21 @@ export class LabPageLabComponent implements OnInit {
       });
   }
 
+  onLogout(): void {
+    this._authService.logout().subscribe(value => {
+      this._router.navigate(['/auth']);
+    });
+  }
+
+  showModal(submission: any): void {
+    this.isVisible = true;
+    this.selectedSubmission = submission;
+  }
+
+  handleOk(): void {
+    this.isVisible = false;
+  }
+
   private getSubmissionStatus(): void {
     interval(1000)
       .pipe(
@@ -110,6 +129,8 @@ export class LabPageLabComponent implements OnInit {
         if (data.status.toLowerCase() === 'finished') {
           this.taskStatus = data.message;
           this.testFailedCount = data.testsFailed;
+
+          this.getSubmissions();
         }
       });
   }
@@ -132,9 +153,18 @@ export class LabPageLabComponent implements OnInit {
       });
   }
 
-  onLogout(): void {
-    this._authService.logout().subscribe(value => {
-      this._router.navigate(['/auth']);
-    });
+  private getSubmissions (): void {
+    this._codeService.getSubmissions(this.selectedTask.id)
+      .subscribe(data => {
+        this.submissions = data.content.map(it => {
+          const date = new Date(it.submittedAt)
+          return {
+            ...it,
+            submittedAt: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+          }
+        });
+
+        this._changeDetectorRef.detectChanges();
+      })
   }
 }
