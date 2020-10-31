@@ -55,9 +55,7 @@ export class LabPageLabComponent implements OnInit {
   }
 
   onRunCode(): void {
-    this._taskCount++;
-
-    this._codeService.submission({ taskId: String(this._taskCount), language: 'java', code: 'void' })
+    this._codeService.submission({ taskId: this.selectedTask.id(), language: 'java', code: 'void' })
       .subscribe(data => {
         console.info('--', data);
       });
