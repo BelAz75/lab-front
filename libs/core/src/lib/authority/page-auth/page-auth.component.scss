@@ -1,0 +1,14 @@
+@import 'variables';
+
+:host {
+  width: 400px;
+
+  align-self: center;
+
+  margin-top: $grid-offset-step * 25;
+}
+
+.lab-input-password,
+.lab-btn-login {
+  margin-top: $grid-offset-step * 2;
+}

@@ -1,0 +1,19 @@
+@function tint($color, $percent){
+  @return mix(white, $color, $percent);
+}
+
+// Add percentage of black to a color
+@function shade($color, $percent){
+  @return mix(black, $color, $percent);
+}
+
+$font-base: 13px;
+$grid-offset-step: 6px;
+$animation-step: 160ms;
+
+// [ Text colors ]
+$text-primary-color:              #1d1d1d;
+$text-secondary-color:            tint($text-primary-color, 20%); // #4A4A4A
+$text-grade-color:                tint($text-primary-color, 40%); // #777777
+$text-grade-second-color:         tint($text-primary-color, 60%); // #A5A5A5
+$text-disabled-color:             tint($text-primary-color, 80%); // #D2D2D2

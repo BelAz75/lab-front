@@ -1,0 +1,8 @@
+<main class="lab-main g-flex-column g-flex-column__item">
+  <router-outlet #outlet="outlet">
+  </router-outlet>
+</main>
+
+<nz-spin *ngIf="!outlet.isActivated">
+</nz-spin>
+

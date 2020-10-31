@@ -1,0 +1,36 @@
+@import 'variables';
+
+$sidebar-width: 350px;
+
+:host {
+  margin: ($grid-offset-step * 2) ($grid-offset-step * 3);
+}
+
+.lab-sidebar {
+  width: $sidebar-width;
+  margin-right: $grid-offset-step;
+
+  &__title {
+    width: $sidebar-width;
+    margin-right: $grid-offset-step;
+    margin-bottom: $grid-offset-step;
+  }
+
+  &__title-label {
+    margin-bottom: $grid-offset-step;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .lab-step-learn {
+    margin-right: $grid-offset-step;
+  }
+
+  .lab-steps-code {
+    margin-left: $grid-offset-step;
+  }
+
+  .lab-step-code {
+    width: 46px;
+  }
+}

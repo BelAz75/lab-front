@@ -1,0 +1,26 @@
+export enum USER_AUTHORITIES {
+  ROLE_USER = 'ROLE_USER',
+  ROLE_TEACHER = 'ROLE_TEACHER',
+  ROLE_ADMIN = 'ROLE_ADMIN',
+}
+
+const ROLE_USER = {
+  role: USER_AUTHORITIES.ROLE_USER,
+  title: 'Ученик'
+}
+
+const ROLE_TEACHER = {
+  role: USER_AUTHORITIES.ROLE_TEACHER,
+  title: 'Учитель'
+}
+
+const ROLE_ADMIN = {
+  role: USER_AUTHORITIES.ROLE_ADMIN,
+  title: 'Администратор'
+}
+
+export const AUTH_ROLES = {
+  [USER_AUTHORITIES.ROLE_USER]: ROLE_USER,
+  [USER_AUTHORITIES.ROLE_TEACHER]: ROLE_TEACHER,
+  [USER_AUTHORITIES.ROLE_ADMIN]: ROLE_ADMIN,
+}

@@ -1,0 +1,33 @@
+<input
+  class="lab-input-email"
+  nz-input
+  autocomplete="off"
+  placeholder="Email"
+  [formControl]="emailControl" />
+
+<nz-input-group
+  class="lab-input-password"
+  [nzSuffix]="suffixTemplate">
+  <input
+    [type]="passwordVisible ? 'text' : 'password'"
+    nz-input
+    autocomplete="off"
+    placeholder="Пароль"
+    [formControl]="passwordControl" />
+</nz-input-group>
+
+<ng-template #suffixTemplate>
+  <i
+    nz-icon
+    [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+    (click)="passwordVisible = !passwordVisible">
+  </i>
+</ng-template>
+
+<button
+  class="lab-btn-login"
+  nz-button
+  nzType="primary"
+  (click)="onLogin()">
+  Войти
+</button>

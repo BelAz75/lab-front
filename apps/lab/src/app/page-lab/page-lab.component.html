@@ -1,0 +1,129 @@
+<!--
+<div class="lab-top-bar g-flex g-flex&#45;&#45;align-center g-flex-column__item-fixed">
+  <div class="lab-top-bar__title g-flex__item-fixed">
+    <div class="lab-top-bar__title-label">Основы Java для спортивного программирования</div>
+    <div class="lab-top-bar__title-progress">Прогресс по курсу: 0/18</div>
+  </div>
+
+  <div class="lab-top-bar__steps g-flex__item g-flex g-flex&#45;&#45;align-center">
+    <button
+      class="lab-step-learn g-flex__item-fixed"
+      nz-button
+      nzType="primary">
+      <i nz-icon nzType="snippets"></i>
+    </button>
+
+    <nz-radio-group
+      class="lab-steps-code g-flex__item"
+      [formControl]="codeStepControl">
+      <label
+        class="lab-step-code"
+        nz-radio-button
+        nzValue="step0">
+        <i nz-icon nzType="code"></i>
+      </label>
+
+      <label
+        class="lab-step-code"
+        nz-radio-button
+        nzValue="step1">
+        <i nz-icon nzType="code"></i>
+      </label>
+
+      <label
+        class="lab-step-code"
+        nz-radio-button
+        nzValue="step2">
+        <i nz-icon nzType="code"></i>
+      </label>
+    </nz-radio-group>
+  </div>
+
+  <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
+    {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
+  </div>
+</div>
+
+<div class="lab-main g-flex g-flex-column__item">
+  <aside class="lab-sidebar g-flex__item-fixed">
+    <div>
+
+    </div>
+
+    <nz-tree
+      [nzData]="learnNodes"
+      nzShowLine
+      (nzClick)="onSelectLearn($event)">
+    </nz-tree>
+  </aside>
+
+  <div class="lab-content g-flex__item"></div>
+</div>
+-->
+
+<aside class="lab-sidebar g-flex__item-fixed">
+  <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
+    {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
+  </div>
+
+  <div class="lab-sidebar__title">
+    <div class="lab-sidebar__title-label">Основы Java для спортивного программирования</div>
+    <div class="lab-sidebar__title-progress">Прогресс по курсу: 0/18</div>
+  </div>
+
+  <nz-tree
+    [nzData]="learnNodes"
+    nzShowLine
+    (nzClick)="onSelectLearn($event)">
+  </nz-tree>
+</aside>
+
+<main class="g-flex__item">
+  <nz-tabset>
+    <nz-tab [nzTitle]="learnTemplate">
+      {{ selectedStep?.origin.title }}
+
+      <video class="vjs-tech" lang="ru" poster="https://ucarecdn.com/c39112a5-3040-4652-adfd-bf437f8bf442/"
+             id="vjs_video_6230_html5_api" tabindex="-1"
+             src="https://ucarecdn.com/fc4016ac-6ddf-4e4c-837f-a09c8d7d45fd/108681_360_b3921d26e1241240a95a28022f9d5d43.mp4">
+        <source
+          src="https://ucarecdn.com/c6af6d07-7d48-4f9b-9566-6df8f34d1407/108681_1080_31fe2862d971275b2118cf1793ccdecc.mp4"
+          data-vjs-res="1080" type="video/mp4">
+        <source
+          src="https://ucarecdn.com/168498bc-8017-4b4c-be58-9b6749971787/108681_720_d69c853a64fa04bfbefe734875842f5d.mp4"
+          data-vjs-res="720" type="video/mp4">
+        <source
+          src="https://ucarecdn.com/df032a93-8edf-49d3-b943-3e3bde6d39f3/108681_540_ad93979508dbb830fe143d2026422d3f.mp4"
+          data-vjs-res="540" type="video/mp4">
+        <source
+          src="https://ucarecdn.com/fc4016ac-6ddf-4e4c-837f-a09c8d7d45fd/108681_360_b3921d26e1241240a95a28022f9d5d43.mp4"
+          data-vjs-res="360" type="video/mp4">
+        <source
+          src="https://ucarecdn.com/cdc4fdb7-f262-464b-bed6-fbdb8e101d02/108681_240_e6af2aaf5ca32089090e1f0575de81e1.mp4"
+          data-vjs-res="240" type="video/mp4">
+      </video>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="codeStepTemplate">
+      <pre><code class="language-javascript"><textarea></textarea></code></pre>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="codeStepTemplate">
+      Content of Tab Pane 2
+    </nz-tab>
+
+    <nz-tab [nzTitle]="codeStepTemplate">
+      Content of Tab Pane 3
+    </nz-tab>
+  </nz-tabset>
+
+  <ng-template #learnTemplate>
+    &nbsp;&nbsp;
+    <i nz-icon nzType="snippets"></i>
+  </ng-template>
+
+  <ng-template #codeStepTemplate>
+    &nbsp;&nbsp;
+    <i nz-icon nzType="code"></i>
+  </ng-template>
+</main>

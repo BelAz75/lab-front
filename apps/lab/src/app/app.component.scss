@@ -1,0 +1,14 @@
+@import "grid";
+
+:host {
+  height: 100%;
+}
+
+// Add column__item grid class to get correct grid behaviour in Chrome40 / IE11
+.lab-main router-outlet {
+  display: none;
+}
+
+.lab-main ::ng-deep > * {
+  @extend .g-flex-column__item;
+}
