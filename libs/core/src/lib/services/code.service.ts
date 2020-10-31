@@ -60,9 +60,9 @@ export class CodeService {
     );
   }
 
-  editTask (task: any): Observable<any> {
+  editTask (taskId: string, task: any): Observable<any> {
     return this._http.put(
-      `${LAB_API_ENDPOINT}/task`,
+      `${LAB_API_ENDPOINT}/task/${taskId}`,
       task
     );
   }

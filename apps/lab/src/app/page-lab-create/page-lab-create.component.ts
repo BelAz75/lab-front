@@ -143,7 +143,7 @@ export class LabPageLabCreateComponent implements OnInit {
     }
 
     if (this.isEdit) {
-      this._codeService.editTask(task)
+      this._codeService.editTask(this.selectedTask.id, task)
         .subscribe(() => {
           this.isEdit = false;
 
