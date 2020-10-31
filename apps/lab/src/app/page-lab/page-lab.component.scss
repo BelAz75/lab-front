@@ -39,7 +39,36 @@ $sidebar-width: 350px;
   margin-bottom: $grid-offset-step * 2;
 }
 
-.lab-code-edit {
+.lab-code {
+  max-width: 500px;
+
+  &__lang {
+    margin-bottom: $grid-offset-step;
+  }
+
+  &__edit {
+    height: 300px;
+  }
+}
+
+.lab-footer {
+  margin-top: $grid-offset-step * 2;
+}
+
+.lab-btn-run {
+  align-self: baseline;
+}
+
+.lab-result {
+  white-space: pre-wrap;
+  padding: $grid-offset-step;
+  margin-top: $grid-offset-step * 2;
+  background: #fafafa;
   width: 500px;
-  height: 300px;
+  border: 1px solid #efefef;
+  border-radius: 2px;
+
+  &.lab-error {
+    border-color: #de6868;
+  }
 }

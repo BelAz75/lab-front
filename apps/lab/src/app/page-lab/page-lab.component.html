@@ -1,74 +1,10 @@
-<!--
-<div class="lab-top-bar g-flex g-flex&#45;&#45;align-center g-flex-column__item-fixed">
-  <div class="lab-top-bar__title g-flex__item-fixed">
-    <div class="lab-top-bar__title-label">Основы Java для спортивного программирования</div>
-    <div class="lab-top-bar__title-progress">Прогресс по курсу: 0/18</div>
-  </div>
-
-  <div class="lab-top-bar__steps g-flex__item g-flex g-flex&#45;&#45;align-center">
-    <button
-      class="lab-step-learn g-flex__item-fixed"
-      nz-button
-      nzType="primary">
-      <i nz-icon nzType="snippets"></i>
-    </button>
-
-    <nz-radio-group
-      class="lab-steps-code g-flex__item"
-      [formControl]="codeStepControl">
-      <label
-        class="lab-step-code"
-        nz-radio-button
-        nzValue="step0">
-        <i nz-icon nzType="code"></i>
-      </label>
-
-      <label
-        class="lab-step-code"
-        nz-radio-button
-        nzValue="step1">
-        <i nz-icon nzType="code"></i>
-      </label>
-
-      <label
-        class="lab-step-code"
-        nz-radio-button
-        nzValue="step2">
-        <i nz-icon nzType="code"></i>
-      </label>
-    </nz-radio-group>
-  </div>
-
-  <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
-    {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
-  </div>
-</div>
-
-<div class="lab-main g-flex g-flex-column__item">
-  <aside class="lab-sidebar g-flex__item-fixed">
-    <div>
-
-    </div>
-
-    <nz-tree
-      [nzData]="learnNodes"
-      nzShowLine
-      (nzClick)="onSelectLearn($event)">
-    </nz-tree>
-  </aside>
-
-  <div class="lab-content g-flex__item"></div>
-</div>
--->
-
 <aside class="lab-sidebar g-flex__item-fixed">
   <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
     {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
   </div>
 
   <div class="lab-sidebar__title">
-    <div class="lab-sidebar__title-label">Основы Java для спортивного программирования</div>
-    <div class="lab-sidebar__title-progress">Прогресс по курсу: 0/18</div>
+    <div class="lab-sidebar__title-label">Задания:</div>
   </div>
 
   <nz-tree
@@ -79,22 +15,60 @@
 </aside>
 
 <main class="g-flex__item g-flex-column">
-  <div class="lab-task-title">
-    Задание: написать код
-  </div>
+  <ng-container *ngIf="selectedTask; else placeholderTpl">
+    <div class="lab-task-title">
+      {{ selectedTask?.description }}
+    </div>
 
-  <div class="lab-code">
-    <textarea
-      class="lab-code-edit"
-      [formControl]="codeControl">
-    </textarea>
+    <div class="lab-code g-flex-column">
+      <nz-select
+        class="lab-code__lang"
+        [formControl]="languageControl">
+        <nz-option
+          [nzValue]="CODE_LANGS.JAVA"
+          [nzLabel]="CODE_LANGS.JAVA">
+        </nz-option>
 
-    <button
-      class="lab-btn-run"
-      nz-button
-      nzType="primary"
-      (click)="onRunCode()">
-      Запустить
-    </button>
-  </div>
+        <nz-option
+          [nzValue]="CODE_LANGS.PYTHON"
+          [nzLabel]="CODE_LANGS.PYTHON">
+        </nz-option>
+      </nz-select>
+
+      <textarea
+        class="lab-code__edit"
+        [formControl]="codeControl">
+      </textarea>
+
+      <div class="lab-footer g-flex g-flex--align-center g-flex--space-between">
+        <button
+          class="lab-btn-run"
+          nz-button
+          nzType="primary"
+          [disabled]="isCodeRunning"
+          (click)="onRunCode()">
+          Запустить
+        </button>
+
+        <nz-spin *ngIf="isCodeRunning">
+        </nz-spin>
+      </div>
+    </div>
+
+    <ng-container *ngIf="taskStatus !== null">
+      <div class="lab-result" [class.lab-error]="taskStatus !== ''">
+        <ng-container *ngIf="taskStatus === ''; else errorTpl">
+          Успешно
+        </ng-container>
+
+        <ng-template #errorTpl>
+          {{ taskStatus }}
+        </ng-template>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #placeholderTpl>
+    Выбирите задание из списка
+  </ng-template>
 </main>

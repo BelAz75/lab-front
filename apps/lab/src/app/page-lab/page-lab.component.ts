@@ -4,9 +4,15 @@ import { LabUserModel } from '@lab/core/models/user.model';
 import { AUTH_ROLES, USER_AUTHORITIES } from '@lab/core/constants/authorities.constant';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { NzTreeNodeOptions } from 'ng-zorro-antd/core/tree';
-import { NzTreeNode } from 'ng-zorro-antd/core/tree/nz-tree-base-node';
 import { FormControl } from '@angular/forms';
-import { CodeService } from '../../../../../libs/core/src/lib/services/code.service';
+import { CodeService } from '@lab/core//services/code.service';
+import { interval } from 'rxjs';
+import { concat, filter, finalize, switchMap, take, takeWhile, zip } from 'rxjs/operators';
+
+enum CODE_LANGS {
+  JAVA = 'java',
+  PYTHON = 'python',
+}
 
 @Component({
   selector: 'lab-page-lab',
@@ -24,8 +30,13 @@ export class LabPageLabComponent implements OnInit {
   userRoleTitle: string;
   selectedTask: any;
   codeControl: FormControl = new FormControl('');
+  languageControl: FormControl = new FormControl('java');
+  CODE_LANGS: typeof CODE_LANGS = CODE_LANGS;
+  selectedLanguage = CODE_LANGS.JAVA;
+  isCodeRunning = false;
+  taskStatus: string = null;
 
-  private _taskCount = 0;
+  private _submissionId: string;
 
   tasksNodes: NzTreeNodeOptions[] = [];
 
@@ -41,6 +52,13 @@ export class LabPageLabComponent implements OnInit {
     this.userRoleTitle = this.roles[this.user?.authorities[0] || USER_AUTHORITIES.ROLE_USER].title;
 
     this.getAssignedTasks();
+
+    this.languageControl.valueChanges
+      .subscribe(lang => {
+        this.selectedLanguage = lang;
+
+        this.getTaskTemplate();
+      });
   }
 
   onSelectLearn(event: NzFormatEmitEvent): void {
@@ -48,24 +66,59 @@ export class LabPageLabComponent implements OnInit {
       .subscribe(task => {
         this.selectedTask = task;
 
-        this._changeDetectorRef.detectChanges();
-
-        console.info(this.selectedTask);
-      })
+        this.getTaskTemplate();
+      });
   }
 
   onRunCode(): void {
-    this._codeService.submission({ taskId: this.selectedTask.id(), language: 'java', code: 'void' })
+    this.taskStatus = null;
+
+    this._codeService.submission({ taskId: this.selectedTask.id, language: this.languageControl.value, code: this.codeControl.value })
       .subscribe(data => {
-        console.info('--', data);
+        this.isCodeRunning = true;
+        this.codeControl.disable();
+        this.languageControl.disable();
+
+        this._submissionId = data.id;
+
+        this.getSubmissionStatus();
+
+        this._changeDetectorRef.detectChanges();
+      });
+  }
+
+  private getSubmissionStatus(): void {
+    interval(1000)
+      .pipe(
+        switchMap(() => this._codeService.getSubmissionById(this._submissionId)),
+        takeWhile(data => data.status.toLowerCase() !== 'finished', true),
+        finalize(() => {
+          this.isCodeRunning = false;
+          this.codeControl.enable();
+          this.languageControl.enable();
+
+          this._changeDetectorRef.detectChanges();
+        })
+      )
+      .subscribe(data => {
+        if (data.status.toLowerCase() === 'finished') {
+          this.taskStatus = data.error;
+        }
+      });
+  }
+
+  private getTaskTemplate(): void {
+    this._codeService.getTaskTemplate(this.selectedTask.id, this.selectedLanguage)
+      .subscribe(({ code }) => {
+        this.codeControl.setValue(code);
+
+        this._changeDetectorRef.detectChanges();
       });
   }
 
   private getAssignedTasks(): void {
     this._codeService.getAssignedTasks({ pageNumber: 1, pageSize: 1000 })
       .subscribe((data) => {
-        console.info('task', data);
-
         this.tasksNodes = data;
 
         this._changeDetectorRef.detectChanges();

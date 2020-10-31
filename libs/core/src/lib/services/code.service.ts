@@ -21,6 +21,12 @@ export class CodeService {
     );
   }
 
+  getSubmissionById (submissionId: string): Observable<any> {
+    return this._http.get<any>(
+      `${LAB_API_ENDPOINT}/submission/${submissionId}`
+    );
+  }
+
   getTasks({ pageNumber, pageSize }: { pageNumber: number, pageSize: number }): Observable<any> {
     return this._http.get(
       `${LAB_API_ENDPOINT}/task?pageNumber=${pageNumber}&pageSize=${pageSize}`
@@ -57,7 +63,7 @@ export class CodeService {
       );
   }
 
-  getTaskById(id: string): Observable<any> {
+  getTaskById (id: string): Observable<any> {
     return this._http.get(
       `${LAB_API_ENDPOINT}/task/${id}`
     );
@@ -74,6 +80,12 @@ export class CodeService {
     return this._http.put(
       `${LAB_API_ENDPOINT}/task/${taskId}`,
       task
+    );
+  }
+
+  getTaskTemplate (id: string, language: string): Observable<any> {
+    return this._http.get(
+      `${LAB_API_ENDPOINT}/submission-template?taskId=${id}&language=${language}`
     );
   }
 }

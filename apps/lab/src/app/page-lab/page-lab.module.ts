@@ -11,6 +11,7 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     NzTreeModule,
     NzRadioModule,
     NzTabsModule,
-    NzSelectModule
+    NzSelectModule,
+    NzSpinModule
   ],
   declarations: [
     LabPageLabComponent,
