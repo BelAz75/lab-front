@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LabUserService } from '@lab/core/services/user.service';
+import { AuthService } from '@lab/core/services/auth.service';
+import {Router} from '@angular/router';
 import { LabUserModel } from '@lab/core/models/user.model';
 import { AUTH_ROLES, USER_AUTHORITIES } from '@lab/core/constants/authorities.constant';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
@@ -42,6 +44,8 @@ export class LabPageLabComponent implements OnInit {
 
   constructor(
     private _userService: LabUserService,
+    private _authService: AuthService,
+    private _router: Router,
     private _codeService: CodeService,
     private _changeDetectorRef: ChangeDetectorRef
   ) {
@@ -125,4 +129,9 @@ export class LabPageLabComponent implements OnInit {
       });
   }
 
+  onLogout(): void {
+    this._authService.logout().subscribe(value => {
+      this._router.navigate(['/auth']);
+    });
+  }
 }
