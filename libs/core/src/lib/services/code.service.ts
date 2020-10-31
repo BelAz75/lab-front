@@ -21,10 +21,10 @@ export class CodeService {
     "userId": 1
 }
    */
-  submission ({ taskId, language, code, userId }: { taskId: string, language: string, code: string, userId: string }): Observable<any> {
+  submission ({ taskId, language, code }: { taskId: string, language: string, code: string }): Observable<any> {
     return this._http.post<any>(
       `${LAB_API_ENDPOINT}/submission`,
-      { taskId, language, code, userId },
+      { taskId, language, code },
     );
   }
 }
