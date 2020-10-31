@@ -24,8 +24,7 @@ export class CodeService {
   submission({ taskId, language, code }: { taskId: string, language: string, code: string }): Observable<any> {
     return this._http.post<any>(
       `${LAB_API_ENDPOINT}/submission`,
-      { taskId, language, code },
-      { withCredentials: true }
+      { taskId, language, code }
     );
   }
 
