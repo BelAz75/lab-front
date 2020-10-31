@@ -5,6 +5,8 @@ import { AUTH_ROLES, USER_AUTHORITIES } from '@lab/core/constants/authorities.co
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { NzTreeNodeOptions } from 'ng-zorro-antd/core/tree';
 import { NzTreeNode } from 'ng-zorro-antd/core/tree/nz-tree-base-node';
+import { FormControl } from '@angular/forms';
+import { CodeService } from '../../../../../libs/core/src/lib/services/code.service';
 
 @Component({
   selector: 'lab-page-lab',
@@ -21,6 +23,9 @@ export class LabPageLabComponent implements OnInit {
   roles = AUTH_ROLES;
   userRoleTitle: string;
   selectedStep: NzTreeNode;
+  codeControl: FormControl = new FormControl('');
+
+  private _taskCount = 0;
 
   learnNodes: NzTreeNodeOptions[] = [
     {
@@ -79,6 +84,7 @@ export class LabPageLabComponent implements OnInit {
 
   constructor (
     private _userService: LabUserService,
+    private _codeService: CodeService,
   ) {
   }
 
@@ -94,5 +100,14 @@ export class LabPageLabComponent implements OnInit {
 
   onSelectedKeysChange (event: any): void {
     console.log(event);
+  }
+
+  onRunCode (): void {
+    this._taskCount++;
+
+    this._codeService.submission({taskId: String(this._taskCount), language: 'java', code: 'void', userId: this.user.id})
+      .subscribe(data => {
+        console.info('--', data);
+      })
   }
 }

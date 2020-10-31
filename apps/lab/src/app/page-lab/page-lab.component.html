@@ -105,7 +105,18 @@
     </nz-tab>
 
     <nz-tab [nzTitle]="codeStepTemplate">
-      <pre><code class="language-javascript"><textarea></textarea></code></pre>
+      <textarea
+        class="lab-code-edit"
+        [formControl]="codeControl">
+      </textarea>
+
+      <button
+        class="lab-btn-run"
+        nz-button
+        nzType="primary"
+        (click)="onRunCode()">
+        Запустить
+      </button>
     </nz-tab>
 
     <nz-tab [nzTitle]="codeStepTemplate">
