@@ -1,4 +1,4 @@
-<aside class="lab-sidebar g-flex__item-fixed">
+<aside class="lab-sidebar g-flex__item-fixed g-flex-column">
   <div class="g-flex g-flex--align-center">
     <div *ngIf="user" class="lab-top-bar__info g-flex__item-fixed">
       {{ userRoleTitle }}: {{ user.firstName }} {{ user.lastName }}
@@ -15,151 +15,80 @@
     </button>
   </div>
 
-  <div class="lab-sidebar__title g-flex g-flex--align-center">
-    <button
-      class="lab-btn-add"
-      nz-button
-      nzType="primary" (click)="onAddNew()">
-      <i nz-icon nzType="plus"></i>
-    </button>
+  <div class="lab-sidebar__lists g-flex-column g-scroll-y">
+    <div class="lab-sidebar__title g-flex g-flex--align-center">
+      <button
+        class="lab-btn-add"
+        nz-button
+        nzType="primary"
+        (click)="onAddNew()">
+        <i nz-icon nzType="plus"></i>
+      </button>
 
-    <div class="lab-sidebar__title-label">Список заданий:</div>
+      <div class="lab-sidebar__title-label">Список заданий:</div>
+    </div>
+
+    <nz-tree
+      [nzData]="tasksNodes"
+      nzShowLine
+      (nzClick)="onSelectTask($event)">
+    </nz-tree>
+
+    <div class="lab-sidebar__title lab-group g-flex g-flex--align-center">
+      <button
+        class="lab-btn-add"
+        nz-button
+        nzType="primary"
+        (click)="onAddGroup()">
+        <i nz-icon nzType="plus"></i>
+      </button>
+
+      <div class="lab-sidebar__title-label">Список групп:</div>
+    </div>
+
+    <nz-tree
+      [nzData]="groups"
+      nzShowLine
+      (nzClick)="onSelectGroup($event)">
+    </nz-tree>
   </div>
-
-  <nz-tree
-    [nzData]="tasksNodes"
-    nzShowLine
-    (nzClick)="onSelectLearn($event)">
-  </nz-tree>
 </aside>
 
 <main class="g-flex__item g-flex-column">
-  <ng-container *ngIf="isAddedNew || isEdit; else placeholderTpl">
-    <div *ngIf="isAddedNew" class="lab-task-title">
-      Добавление нового задания
+  <ng-container *ngIf="isAddGroup || isEditGroup">
+    <div *ngIf="isAddGroup" class="lab-task-title">
+      Добавление группы
     </div>
 
-    <div *ngIf="isEdit" class="lab-task-title">
-      Редактирование задания
+    <div *ngIf="isEditGroup" class="lab-task-title">
+      Редактирование группы
     </div>
 
     <div class="lab-label">Название:</div>
     <input
       class="lab-title"
       nz-input
-      [formControl]="titleControl" />
+      [formControl]="groupTitleControl" />
 
-    <div class="lab-label">Описание задачи:</div>
-    <textarea
-      class="lab-desc"
-      nz-input
-      [formControl]="descriptionControl">
-    </textarea>
-
-    <div class="lab-label">Имя метода:</div>
-    <input
-      class="lab-method"
-      nz-input
-      [formControl]="methodControl" />
-
-    <div class="lab-label">Входные параметры:</div>
-    <div class="lab-input1 g-flex g-flex--align-center">
-      <input
-        class="lab-input1__name"
-        nz-input
-        [formControl]="input1ControlName" />
-
-      <nz-select
-        class="lab-input1__type"
-        [formControl]="input1ControlType">
-        <nz-option
-          [nzValue]="OUTPUT_PARAMETERS.STRING"
-          [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.STRING]">
-        </nz-option>
-
-        <nz-option
-          [nzValue]="OUTPUT_PARAMETERS.INTEGER"
-          [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.INTEGER]">
-        </nz-option>
-      </nz-select>
-    </div>
-
-    <div class="lab-input2 g-flex g-flex--align-center">
-      <input
-        class="lab-input2__name"
-        nz-input
-        [formControl]="input2ControlName" />
-
-      <nz-select
-        class="lab-input2__type"
-        [formControl]="input2ControlType">
-        <nz-option
-          [nzValue]="OUTPUT_PARAMETERS.STRING"
-          [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.STRING]">
-        </nz-option>
-
-        <nz-option
-          [nzValue]="OUTPUT_PARAMETERS.INTEGER"
-          [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.INTEGER]">
-        </nz-option>
-      </nz-select>
-    </div>
-
-    <div class="lab-label">Тип выходного параметра:</div>
     <nz-select
-      class="lab-output"
-      [formControl]="outputControl">
+      *ngIf="isEditGroup"
+      nzMode="multiple"
+      nzPlaceHolder="Добавьте учеников в группу"
+      [formControl]="groupUserControl"
+      (nzBlur)="onBlurGroupUsers()">
       <nz-option
-        [nzValue]="OUTPUT_PARAMETERS.STRING"
-        [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.STRING]">
-      </nz-option>
-
-      <nz-option
-        [nzValue]="OUTPUT_PARAMETERS.INTEGER"
-        [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.INTEGER]">
+        *ngFor="let user of usersOnly"
+        [nzLabel]="user.fullName"
+        [nzValue]="user.id">
       </nz-option>
     </nz-select>
-
-    <div class="lab-label">Тест 1:</div>
-    <div class="lab-test1 g-flex g-flex--align-center">
-      <textarea
-        class="lab-test1__input"
-        nz-input
-        placeholder="Входные значения"
-        [formControl]="test1InputControl">
-      </textarea>
-
-      <textarea
-        class="lab-test1__expected"
-        nz-input
-        placeholder="Ожидаемый результат"
-        [formControl]="test1ExpectedControl">
-      </textarea>
-    </div>
-
-    <div class="lab-label">Тест 2:</div>
-    <div class="lab-test2 g-flex g-flex--align-center">
-      <textarea
-        class="lab-test2__input"
-        nz-input
-        placeholder="Входные значения"
-        [formControl]="test2InputControl">
-      </textarea>
-
-      <textarea
-        class="lab-test2__expected"
-        nz-input
-        placeholder="Ожидаемый результат"
-        [formControl]="test2ExpectedControl">
-      </textarea>
-    </div>
 
     <div class="lab-buttons g-flex g-flex--align-center">
       <button
         class="lab-buttons__cancel"
         nz-button
         nzType="default"
-        (click)="onCancel()">
+        (click)="onGroupCancel()">
         Отмена
       </button>
 
@@ -167,13 +96,178 @@
         class="lab-buttons__save"
         nz-button
         nzType="primary"
-        (click)="onSave()">
+        (click)="onGroupSave()">
         Сохранить
       </button>
     </div>
   </ng-container>
 
+  <ng-container *ngIf="(isAddedNew || isEdit) && !isAddGroup && !isEditGroup; else placeholderTpl">
+    <nz-tabset>
+      <nz-tab nzTitle="Задание">
+        <div class="lab-tab-content g-flex-column g-flex-column__item g-scroll-y">
+          <div *ngIf="isAddedNew" class="lab-task-title">
+            Добавление нового задания
+          </div>
+
+          <div *ngIf="isEdit" class="lab-task-title">
+            Редактирование задания
+          </div>
+
+          <div class="lab-label">Название:</div>
+          <input
+            class="lab-title"
+            nz-input
+            [formControl]="titleControl" />
+
+          <div class="lab-label">Описание задачи:</div>
+          <textarea
+            class="lab-desc"
+            nz-input
+            [formControl]="descriptionControl">
+          </textarea>
+
+          <div class="lab-label">Имя метода:</div>
+          <input
+            class="lab-method"
+            nz-input
+            [formControl]="methodControl" />
+
+          <div class="lab-label">Входные параметры:</div>
+          <div class="lab-input1 g-flex g-flex--align-center">
+            <input
+              class="lab-input1__name"
+              nz-input
+              [formControl]="input1ControlName" />
+
+            <nz-select
+              class="lab-input1__type"
+              [formControl]="input1ControlType">
+              <nz-option
+                [nzValue]="OUTPUT_PARAMETERS.STRING"
+                [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.STRING]">
+              </nz-option>
+
+              <nz-option
+                [nzValue]="OUTPUT_PARAMETERS.INTEGER"
+                [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.INTEGER]">
+              </nz-option>
+            </nz-select>
+          </div>
+
+          <div class="lab-input2 g-flex g-flex--align-center">
+            <input
+              class="lab-input2__name"
+              nz-input
+              [formControl]="input2ControlName" />
+
+            <nz-select
+              class="lab-input2__type"
+              [formControl]="input2ControlType">
+              <nz-option
+                [nzValue]="OUTPUT_PARAMETERS.STRING"
+                [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.STRING]">
+              </nz-option>
+
+              <nz-option
+                [nzValue]="OUTPUT_PARAMETERS.INTEGER"
+                [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.INTEGER]">
+              </nz-option>
+            </nz-select>
+          </div>
+
+          <div class="lab-label">Тип выходного параметра:</div>
+          <nz-select
+            class="lab-output"
+            [formControl]="outputControl">
+            <nz-option
+              [nzValue]="OUTPUT_PARAMETERS.STRING"
+              [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.STRING]">
+            </nz-option>
+
+            <nz-option
+              [nzValue]="OUTPUT_PARAMETERS.INTEGER"
+              [nzLabel]="OUTPUT_PARAMETERS_NAMES[OUTPUT_PARAMETERS.INTEGER]">
+            </nz-option>
+          </nz-select>
+
+          <div class="lab-label">Тест 1:</div>
+          <div class="lab-test1 g-flex g-flex--align-center">
+            <textarea
+              class="lab-test1__input"
+              nz-input
+              placeholder="Входные значения"
+              [formControl]="test1InputControl">
+            </textarea>
+
+            <textarea
+              class="lab-test1__expected"
+              nz-input
+              placeholder="Ожидаемый результат"
+              [formControl]="test1ExpectedControl">
+            </textarea>
+          </div>
+
+          <div class="lab-label">Тест 2:</div>
+          <div class="lab-test2 g-flex g-flex--align-center">
+            <textarea
+              class="lab-test2__input"
+              nz-input
+              placeholder="Входные значения"
+              [formControl]="test2InputControl">
+            </textarea>
+
+            <textarea
+              class="lab-test2__expected"
+              nz-input
+              placeholder="Ожидаемый результат"
+              [formControl]="test2ExpectedControl">
+            </textarea>
+          </div>
+
+          <div class="lab-buttons g-flex g-flex--align-center">
+            <button
+              class="lab-buttons__cancel"
+              nz-button
+              nzType="default"
+              (click)="onCancel()">
+              Отмена
+            </button>
+
+            <button
+              class="lab-buttons__save"
+              nz-button
+              nzType="primary"
+              (click)="onSave()">
+              Сохранить
+            </button>
+          </div>
+        </div>
+      </nz-tab>
+
+      <nz-tab
+        *ngIf="isEdit"
+        nzTitle="Закрепленные ученики и группы">
+        <div class="lab-tab-content g-flex-column g-flex-column__item g-scroll-y">
+          <nz-select
+            nzMode="multiple"
+            nzPlaceHolder="Выберите учеников или группы учеников"
+            [formControl]="assignControl"
+            (nzBlur)="onBlurAssign()">
+            <nz-option
+              *ngFor="let user of users"
+              [nzLabel]="user.fullName"
+              [nzValue]="user.id">
+            </nz-option>
+          </nz-select>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+  </ng-container>
+
   <ng-template #placeholderTpl>
-    Выберите задание из списка или создайте новое
+    <ng-container *ngIf="!isAddGroup && !isEditGroup">
+      Выберите задание или группу для редактирования или создайте новое
+    </ng-container>
   </ng-template>
 </main>

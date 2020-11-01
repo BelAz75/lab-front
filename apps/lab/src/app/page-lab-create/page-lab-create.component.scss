@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'grid';
 
 $sidebar-width: 350px;
 
@@ -17,6 +18,10 @@ $sidebar-width: 350px;
 .lab-sidebar {
   width: $sidebar-width;
   margin-right: $grid-offset-step;
+
+  &__lists {
+    margin-top: $grid-offset-step * 2;
+  }
 
   &__title {
     width: $sidebar-width;
@@ -64,7 +69,8 @@ $sidebar-width: 350px;
 .lab-method,
 .lab-input2,
 .lab-output,
-.lab-test1 {
+.lab-test1,
+.lab-test2 {
   margin-bottom: $grid-offset-step * 2;
 }
 
@@ -94,5 +100,33 @@ $sidebar-width: 350px;
 
   &__save {
     margin-left: $grid-offset-step * 2;
+  }
+}
+
+.lab-tab-content {
+  padding-right: $grid-offset-step * 2;
+}
+
+.lab-group {
+  margin-top: $grid-offset-step * 3;
+}
+
+::ng-deep {
+  .ant-tabs-content-holder {
+    @extend .g-flex-column;
+  }
+
+  .ant-tabs-content,
+  .ant-tabs-tabpane {
+    @extend .g-flex-column;
+    @extend .g-flex-column__item;
+  }
+
+  .ant-tabs-content {
+    margin-left: 0 !important;
+  }
+
+  .ant-tabs-tabpane {
+    height: 100%;
   }
 }

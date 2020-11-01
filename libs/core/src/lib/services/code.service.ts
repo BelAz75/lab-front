@@ -75,6 +75,23 @@ export class CodeService {
     );
   }
 
+  getTaskUsers (taskId: string): Observable<any> {
+    return this._http.get(
+      `${LAB_API_ENDPOINT}/task/${taskId}/assignment`,
+    );
+  }
+
+  setTaskUsers (taskId: string, userIds: string[], groupIds: string[]): Observable<any> {
+    return this._http.put(
+      `${LAB_API_ENDPOINT}/task/${taskId}/assignment`,
+      {
+        deadline: '2021-10-31T21:31:22.898Z',
+        groupIds,
+        userIds,
+      }
+    );
+  }
+
   createTask (task: any): Observable<any> {
     return this._http.post(
       `${LAB_API_ENDPOINT}/task`,

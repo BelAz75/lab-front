@@ -20,7 +20,7 @@ import { USER_AUTHORITIES } from '@lab/core/constants/authorities.constant';
 export class LabPageAuthComponent {
   passwordVisible = false;
 
-  emailControl: FormControl = new FormControl('petr@gmail.com'); // maria.ivanova@gmail.com
+  emailControl: FormControl = new FormControl('maria.ivanova@gmail.com'); // petr@gmail.com
   passwordControl: FormControl = new FormControl('12345');
 
   constructor (
@@ -36,7 +36,6 @@ export class LabPageAuthComponent {
         map(data => new LabUserModel(data))
       )
       .subscribe(user => {
-        console.info(user);
         this._userService.setUser(user);
 
         if (user.authorities.includes(USER_AUTHORITIES.ROLE_TEACHER)) {

@@ -73,7 +73,7 @@ export class LabPageLabComponent implements OnInit {
     this._codeService.getTaskById(event.node.key)
       .subscribe(task => {
         this.selectedTask = task;
-        
+
         this.getTaskTemplate();
         this.getSubmissions();
       });
